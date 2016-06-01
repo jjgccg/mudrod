@@ -41,9 +41,6 @@ public class Example extends DiscoveryStepAbstract {
     es.createBulkProcesser();
     /* Do something */
 
-    //test    
-    //added on github
-
     es.destroyBulkProcessor();
     endTime=System.currentTimeMillis();
     System.out.println("*****************Example ends******************Took " + (endTime-startTime)/1000+"s");
