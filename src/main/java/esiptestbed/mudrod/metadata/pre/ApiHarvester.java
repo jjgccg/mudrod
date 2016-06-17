@@ -13,8 +13,6 @@
  */
 package esiptestbed.mudrod.metadata.pre;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +24,6 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.common.xcontent.XContentBuilder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -50,6 +47,9 @@ public class ApiHarvester extends DiscoveryStepAbstract {
 		// TODO Auto-generated method stub
 		System.out.println("*****************Metadata harvesting starts******************");
 		startTime=System.currentTimeMillis();
+		
+		es.deleteType(config.get("indexName"), config.get("raw_metadataType"));
+		
 		es.createBulkProcesser();
 		addMetadataMapping();
 		//harvestMetadatafromWeb();
@@ -62,7 +62,8 @@ public class ApiHarvester extends DiscoveryStepAbstract {
 	}
 
 	public void addMetadataMapping(){
-		String mapping_json = "{\r\n   \"dynamic_templates\": [\r\n      {\r\n         \"strings\": {\r\n            \"match_mapping_type\": \"string\",\r\n            \"mapping\": {\r\n               \"type\": \"string\",\r\n               \"analyzer\": \"english\"\r\n            }\r\n         }\r\n      }\r\n   ]\r\n}";
+		//String mapping_json = "{\r\n   \"dynamic_templates\": [\r\n      {\r\n         \"strings\": {\r\n            \"match_mapping_type\": \"string\",\r\n            \"mapping\": {\r\n               \"type\": \"string\",\r\n               \"analyzer\": \"english\"\r\n            }\r\n         }\r\n      }\r\n   ]\r\n}";
+		String mapping_json = "{\r\n   \r\n      \"dynamic_templates\": [\r\n         {\r\n            \"strings\": {\r\n               \"mapping\": {\r\n                  \"type\": \"string\",\r\n                  \"analyzer\": \"english\"\r\n               },\r\n               \"match_mapping_type\": \"string\"\r\n            }\r\n         }\r\n      ],\r\n      \"properties\": {\r\n            \"DatasetCitation-ReleaseDateLong\": {\r\n               \"type\": \"date\"\r\n            }\r\n      }\r\n  \r\n}";
 		es.client.admin().indices()
 		.preparePutMapping(config.get("indexName"))
 		.setType(config.get("raw_metadataType"))

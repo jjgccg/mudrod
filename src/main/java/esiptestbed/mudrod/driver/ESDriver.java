@@ -279,7 +279,7 @@ public class ESDriver implements Serializable {
 
 		JsonObject PDResults = new JsonObject();
 		PDResults.add("PDResults", fileList_Element);
-		System.out.print("Search results returned." + "\n");
+		//System.out.print("Search results returned." + "\n");
 		return PDResults.toString();
 	}
 

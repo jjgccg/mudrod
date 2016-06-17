@@ -64,7 +64,7 @@ public class CrawlerDetection extends DiscoveryStepAbstract{
 	public static final String JavaHTTP ="Java/";
 	public static final String cURL ="curl/";
 
-	
+
 	@Override
 	public Object execute() {
 		// TODO Auto-generated method stub
@@ -99,7 +99,7 @@ public class CrawlerDetection extends DiscoveryStepAbstract{
 
 	public void CheckByRate() throws InterruptedException, IOException{	
 		es.createBulkProcesser();
-		
+
 		int rate = Integer.parseInt(config.get("sendingrate"));
 		SearchResponse sr = es.client.prepareSearch(config.get("indexName"))                          
 				.setTypes(HTTP_type)
@@ -120,85 +120,85 @@ public class CrawlerDetection extends DiscoveryStepAbstract{
 			QueryBuilder  query_search = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), filter_search);
 
 
-      SearchResponse checkRobot = es.client.prepareSearch(config.get("indexName"))
-          .setTypes(HTTP_type,FTP_type)
-          .setQuery(query_search)
-          .setSize(0)
-          .addAggregation(AggregationBuilders.dateHistogram("by_minute").field("Time").interval((DateHistogram.Interval.MINUTE)).order(DateHistogram.Order.COUNT_DESC))
-          .execute().actionGet();
+			SearchResponse checkRobot = es.client.prepareSearch(config.get("indexName"))
+					.setTypes(HTTP_type,FTP_type)
+					.setQuery(query_search)
+					.setSize(0)
+					.addAggregation(AggregationBuilders.dateHistogram("by_minute").field("Time").interval((DateHistogram.Interval.MINUTE)).order(DateHistogram.Order.COUNT_DESC))
+					.execute().actionGet();
 
-      DateHistogram agg = checkRobot.getAggregations().get("by_minute");
+			DateHistogram agg = checkRobot.getAggregations().get("by_minute");
 
-      List<? extends Bucket> botList = agg.getBuckets();
-      long max_count = botList.get(0).getDocCount();
-      if(max_count>=rate){                                                 //variable one
-        //System.out.print(Long.toString(max_count)+"\n");
-      }
-      else
-      {
-        user_count++;	
-        DateTime dt1 = null;
-        int toLast = 0;
-        SearchResponse scrollResp = es.client.prepareSearch(config.get("indexName"))
-            .setTypes(HTTP_type,FTP_type)
-            .setScroll(new TimeValue(60000))
-            .setQuery(query_search)
-            .setSize(100).execute().actionGet(); //100 hits per shard will be returned for each scroll
+			List<? extends Bucket> botList = agg.getBuckets();
+			long max_count = botList.get(0).getDocCount();
+			if(max_count>=rate){                                                 //variable one
+				//System.out.print(Long.toString(max_count)+"\n");
+			}
+			else
+			{
+				user_count++;	
+				DateTime dt1 = null;
+				int toLast = 0;
+				SearchResponse scrollResp = es.client.prepareSearch(config.get("indexName"))
+						.setTypes(HTTP_type,FTP_type)
+						.setScroll(new TimeValue(60000))
+						.setQuery(query_search)
+						.setSize(100).execute().actionGet(); //100 hits per shard will be returned for each scroll
 
 
-        while (true) {
-          for (SearchHit hit : scrollResp.getHits().getHits()) {
-            Map<String,Object> result = hit.getSource(); 
-            String logtype = (String) result.get("LogType");
-            if(logtype.equals("PO.DAAC")){
-              String request = (String) result.get("Request");
-              matcher = pattern.matcher(request.trim().toLowerCase());
-              boolean find = false;
-              while (matcher.find()) {
-                request = matcher.group(1);
-                result.put("RequestUrl", "http://podaac.jpl.nasa.gov" + request);
-                find = true;
-              }
-              if(!find){
-                result.put("RequestUrl", request);
-              }
-            }else{
-              result.put("RequestUrl",(String) result.get("Request"));
-            }
+				while (true) {
+					for (SearchHit hit : scrollResp.getHits().getHits()) {
+						Map<String,Object> result = hit.getSource(); 
+						String logtype = (String) result.get("LogType");
+						if(logtype.equals("PO.DAAC")){
+							String request = (String) result.get("Request");
+							matcher = pattern.matcher(request.trim().toLowerCase());
+							boolean find = false;
+							while (matcher.find()) {
+								request = matcher.group(1);
+								result.put("RequestUrl", "http://podaac.jpl.nasa.gov" + request);
+								find = true;
+							}
+							if(!find){
+								result.put("RequestUrl", request);
+							}
+						}else{
+							result.put("RequestUrl",(String) result.get("Request"));
+						}
 
-            DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
-            DateTime dt2 = fmt.parseDateTime((String) result.get("Time"));
+						DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
+						DateTime dt2 = fmt.parseDateTime((String) result.get("Time"));
 
-            if(dt1==null){
-              toLast = 0;
-            }else{
-              toLast = Math.abs(Seconds.secondsBetween(dt1, dt2).getSeconds());
-            }
-            result.put("ToLast", toLast);			          
-            IndexRequest ir = new IndexRequest(config.get("indexName"), Cleanup_type).source(result);
+						if(dt1==null){
+							toLast = 0;
+						}else{
+							toLast = Math.abs(Seconds.secondsBetween(dt1, dt2).getSeconds());
+						}
+						result.put("ToLast", toLast);			          
+						IndexRequest ir = new IndexRequest(config.get("indexName"), Cleanup_type).source(result);
 
-            es.bulkProcessor.add(ir); 			              
-            dt1 = dt2;
-          }
+						es.bulkProcessor.add(ir); 			              
+						dt1 = dt2;
+					}
 
-          scrollResp = es.client.prepareSearchScroll(scrollResp.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
-          if (scrollResp.getHits().getHits().length == 0) {
-            break;
-          }
-        }
+					scrollResp = es.client.prepareSearchScroll(scrollResp.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
+					if (scrollResp.getHits().getHits().length == 0) {
+						break;
+					}
+				}
 
-      }
-    }
+			}
+		}
 
-    es.destroyBulkProcessor();
+		es.destroyBulkProcessor();
 
-    System.out.println("User count: "+ Integer.toString(user_count));
-  }
+		System.out.println("User count: "+ Integer.toString(user_count));
+	}
 
-  @Override
-  public Object execute(Object o) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+	@Override
+	public Object execute(Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

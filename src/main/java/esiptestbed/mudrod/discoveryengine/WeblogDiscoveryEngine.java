@@ -39,7 +39,7 @@ public class WeblogDiscoveryEngine extends DiscoveryEngineAbstract {
 	public void preprocess() {
 		// TODO Auto-generated method stub	
 		System.out.println("*****************Web log preprocessing starts******************");
-		
+
 		File directory = new File(config.get("logDir"));
 
 		ArrayList<String> Input_list = new ArrayList<String>();
@@ -56,7 +56,7 @@ public class WeblogDiscoveryEngine extends DiscoveryEngineAbstract {
 		for(int i =0; i < Input_list.size(); i++){
 			startTime=System.currentTimeMillis();
 			System.out.println("*****************Web log preprocessing starts******************" + Input_list.get(i));
-			
+
 			DiscoveryStepAbstract im = new ImportLogFile(this.config, this.es, this.spark, Input_list.get(i));
 			im.execute();
 
@@ -77,13 +77,13 @@ public class WeblogDiscoveryEngine extends DiscoveryEngineAbstract {
 
 			DiscoveryStepAbstract cg = new ClickStreamGenerator(this.config, this.es, this.spark);
 			cg.execute();
-			
+
 			endTime=System.currentTimeMillis();
-			
+
 			System.out.println("*****************Web log preprocessing ends******************Took " + (endTime-startTime)/1000+"s***" + Input_list.get(i));
 		}
 
-		
+
 		System.out.println("*****************Web log preprocessing ends******************");
 
 	}

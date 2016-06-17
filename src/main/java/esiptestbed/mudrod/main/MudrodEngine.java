@@ -33,6 +33,7 @@ import esiptestbed.mudrod.discoveryengine.WeblogDiscoveryEngine;
 import esiptestbed.mudrod.driver.ESDriver;
 import esiptestbed.mudrod.driver.SparkDriver;
 import esiptestbed.mudrod.integration.LinkageIntegration;
+import esiptestbed.mudrod.ranking.SemanticSearch;
 
 public class MudrodEngine {
 	private Map<String, String> config = new HashMap<String, String>();
@@ -85,20 +86,20 @@ public class MudrodEngine {
 
 
 	public void start(){		
-		DiscoveryEngineAbstract wd = new WeblogDiscoveryEngine(config, es, spark);
+		/*DiscoveryEngineAbstract wd = new WeblogDiscoveryEngine(config, es, spark);
 		wd.preprocess();
 		wd.process();
 
 		DiscoveryEngineAbstract od = new OntologyDiscoveryEngine(config, es, spark);
 		od.preprocess();
-		od.process();
+		od.process();*/
 
 		DiscoveryEngineAbstract md = new MetadataDiscoveryEngine(config, es, spark);
 		md.preprocess();
-		md.process(); 
+		//md.process(); 
 
-		LinkageIntegration li = new LinkageIntegration(config, es, spark);
-		li.execute();
+		/*LinkageIntegration li = new LinkageIntegration(config, es, spark);
+		li.execute();*/
 	}
 
 	public void end(){
@@ -109,7 +110,11 @@ public class MudrodEngine {
 		// TODO Auto-generated method stub
 		MudrodEngine test = new MudrodEngine();
 		
-		test.start();
+		test.start();	
+		
+		SemanticSearch ss = new SemanticSearch(test.config, test.es, test.spark);
+		ss.addUserclicks("", null);
+		
 		test.end();
 	}
 }

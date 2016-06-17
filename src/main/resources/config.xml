@@ -17,8 +17,6 @@
 	<para name="httpPrefix">access_log.</para>
 	<para name="ftpPrefix">podaac-ftp.log.</para>
 
-	<para name="metadataurl">null</para>
-
 	<para name="ontologyInputDir">./src/main/java/esiptestbed/tmp/SWEET_ocean/
 	</para>   <!-- owl files directory -->
 	<para name="oceanTriples">./src/main/java/esiptestbed/tmp/Ocean_triples.csv
@@ -53,6 +51,8 @@
 
     <para name="raw_metadataPath">./src/main/java/esiptestbed/tmp/RawMetadata</para>
 	<para name="raw_metadataType">RawMetadata</para>
+	<para name="clickstreamMatrixType">clickstreamMatrix
+	</para>
 
 	<para name="clickstreamSVDDimension">50</para>
 	<para name="metadataSVDDimension">50</para>
