@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -34,7 +33,6 @@ import org.jdom2.input.SAXBuilder;
 import esiptestbed.mudrod.discoveryengine.DiscoveryStepAbstract;
 import esiptestbed.mudrod.driver.ESDriver;
 import esiptestbed.mudrod.driver.SparkDriver;
-import esiptestbed.mudrod.main.MudrodEngine;
 
 public class AggregateTriples extends DiscoveryStepAbstract {
 
@@ -46,7 +44,7 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 	@Override
 	public Object execute() {
 		// TODO Auto-generated method stub
-		File file = null;
+		/*File file = null;
 		try {
 			file = File.createTempFile("oceanTriples", ".csv");
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
@@ -55,9 +53,9 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 		} catch (IOException e3) {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
-		}
+		}*/
 		
-        /*File file = new File(this.config.get("oceanTriples"));
+        File file = new File(this.config.get("oceanTriples"));
 		if (file.exists()) {
 			file.delete();			
 		}
@@ -77,7 +75,7 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 			e.printStackTrace();
 		}
 
-		File[] files = new File(this.config.get("ontologyInputDir")).listFiles();
+		/*File[] files = new File(this.config.get("ontologyInputDir")).listFiles();
 		for (File file_in : files) {      
 		String ext = FilenameUtils.getExtension(file_in.getAbsolutePath());
 		if(ext.equals("owl")){
@@ -93,7 +91,8 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 			}
 
 		}
-	    }*/
+	    }
+		
 		try {
 			List<String> files = IOUtils.readLines(MudrodEngine.class.getClassLoader()
 			        .getResourceAsStream("SWEET_ocean/"));
@@ -111,7 +110,7 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
 
 		try {
 			bw.close();

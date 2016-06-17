@@ -9,12 +9,12 @@
 <Config>
 	<para name="loglevel">1</para> <!-- 1: engine, 2: step, 3: substep -->
 	
-	<para name="logDir">C:/AIST LOG FILES/</para>
+	<!-- <para name="logDir">C:/AIST LOG FILES/</para> -->
 	<para name="httpPrefix">access_log.</para>
 	<para name="ftpPrefix">vsftpd.log.</para>
 
-	<para name="ontologyInputDir">./src/main/java/esiptestbed/tmp/SWEET_ocean/
-	</para>   <!-- owl files directory -->
+	<!-- <para name="ontologyInputDir">./src/main/java/esiptestbed/tmp/SWEET_ocean/
+	</para>   owl files directory
 	<para name="oceanTriples">./src/main/java/esiptestbed/tmp/Ocean_triples.csv
 	</para>
 	
@@ -27,7 +27,7 @@
 	<para name="clickstreamSVDMatrix_tmp">./src/main/java/esiptestbed/tmp/clickstreamSVDMatrix_tmp.csv
 	</para>
 	<para name="metadataSVDMatrix_tmp">./src/main/java/esiptestbed/tmp/metadataSVDMatrix_tmp.csv
-	</para>
+	</para> -->
 
 	<para name="clusterName">elasticsearch</para>
 	<para name="indexName">mudrod</para>
@@ -46,7 +46,7 @@
 	<para name="viewf">200</para>   <!-- threshold for session summarizing, unit second -->
 	<para name="downloadf">100</para>   <!-- threshold for session summarizing, unit second -->
 
-    <para name="raw_metadataPath">./src/main/java/esiptestbed/tmp/RawMetadata</para>
+   <!--  <para name="raw_metadataPath">./src/main/java/esiptestbed/tmp/RawMetadata</para> -->
 	<para name="raw_metadataType">RawMetadata</para>
 
 	<para name="clickstreamSVDDimension">50</para>

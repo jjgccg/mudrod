@@ -70,7 +70,7 @@ public class OntologyLinkCal extends DiscoveryStepAbstract {
 	    }
 
 	@Override
-	public Object execute(Object o) {
+	public Object execute() {
 		// TODO Auto-generated method stub
 		es.deleteType(config.get("indexName"), config.get("ontologyLinkageType"));
 		es.createBulkProcesser();		
@@ -123,7 +123,7 @@ public class OntologyLinkCal extends DiscoveryStepAbstract {
 	}
 
 	@Override
-	public Object execute() {
+	public Object execute(Object o) {
 		// TODO Auto-generated method stub
 		return null;
 	}
