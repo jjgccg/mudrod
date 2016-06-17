@@ -17,12 +17,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -33,6 +34,7 @@ import org.jdom2.input.SAXBuilder;
 import esiptestbed.mudrod.discoveryengine.DiscoveryStepAbstract;
 import esiptestbed.mudrod.driver.ESDriver;
 import esiptestbed.mudrod.driver.SparkDriver;
+import esiptestbed.mudrod.main.MudrodEngine;
 
 public class AggregateTriples extends DiscoveryStepAbstract {
 
@@ -44,7 +46,18 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 	@Override
 	public Object execute() {
 		// TODO Auto-generated method stub
-		File file = new File(this.config.get("oceanTriples"));
+		File file = null;
+		try {
+			file = File.createTempFile("oceanTriples", ".csv");
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			bw = new BufferedWriter(fw);
+			
+		} catch (IOException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		
+        /*File file = new File(this.config.get("oceanTriples"));
 		if (file.exists()) {
 			file.delete();			
 		}
@@ -66,20 +79,38 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 
 		File[] files = new File(this.config.get("ontologyInputDir")).listFiles();
 		for (File file_in : files) {      
-			String ext = FilenameUtils.getExtension(file_in.getAbsolutePath());
-			if(ext.equals("owl")){
-				try {
-					loadxml(file_in.getAbsolutePath());
-					getAllClass();
-				} catch (JDOMException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
+		String ext = FilenameUtils.getExtension(file_in.getAbsolutePath());
+		if(ext.equals("owl")){
+			try {
+				loadxml(file_in.getAbsolutePath());
+				getAllClass();
+			} catch (JDOMException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
+
+		}
+	    }*/
+		try {
+			List<String> files = IOUtils.readLines(MudrodEngine.class.getClassLoader()
+			        .getResourceAsStream("SWEET_ocean/"));
+			
+			for (String f : files) {      
+				InputStream owlStream = MudrodEngine.class.getClassLoader().getResourceAsStream("SWEET_ocean/" + f);
+				try {
+					loadxml(owlStream);
+				} catch (JDOMException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				getAllClass();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 		try {
@@ -88,7 +119,7 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return file;
 	}
 
 	public Document document;
@@ -99,11 +130,18 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 
 	BufferedWriter bw = null;
 
-	public void loadxml(String filePathName) throws JDOMException, IOException{
+/*	public void loadxml(String filePathName) throws JDOMException, IOException{
 		SAXBuilder saxBuilder = new SAXBuilder();
 		File file=new File(filePathName);
 
 		document = saxBuilder.build(file);
+		rootNode = document.getRootElement();
+
+	}*/
+	
+	public void loadxml(InputStream owlStream) throws JDOMException, IOException{
+		SAXBuilder saxBuilder = new SAXBuilder();
+		document = saxBuilder.build(owlStream);
 		rootNode = document.getRootElement();
 
 	}
