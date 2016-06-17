@@ -105,7 +105,7 @@ public class ESDriver implements Serializable {
 				)
 				.setBulkActions(1000) 
 				.setBulkSize(new ByteSizeValue(1, ByteSizeUnit.GB)) 
-				.setFlushInterval(TimeValue.timeValueSeconds(5))    //let's test this
+				//.setFlushInterval(TimeValue.timeValueSeconds(5))    //let's test this
 				.setConcurrentRequests(1) 
 				.build();
 	}
@@ -142,7 +142,7 @@ public class ESDriver implements Serializable {
 		{
 			String tmp = "";
 			AnalyzeResponse r = client.admin().indices()
-					.prepareAnalyze(str_list[i]).setIndex(indexName).setAnalyzer("english")
+					.prepareAnalyze(str_list[i]).setIndex(indexName).setAnalyzer("cody")
 					.execute().get();
 			for (AnalyzeToken token : r.getTokens()) {
 				tmp +=token.getTerm() + " ";
@@ -228,14 +228,6 @@ public class ESDriver implements Serializable {
 		if(!exists){
 			return null;
 		}
-		
-		/*QueryBuilder qb = QueryBuilders.boolQuery()
-			    .should(QueryBuilders.multiMatchQuery("ocean wind", "Dataset-Metadata", "Dataset-ShortName", "Dataset-LongName", "Dataset-Description", "DatasetParameter-*", "DatasetSource-*")
-			    		             .boost(1)
-			    		             .type(MultiMatchQueryBuilder.Type.PHRASE))
-			    .should(QueryBuilders.multiMatchQuery("ocean wind", "Dataset-Metadata", "Dataset-ShortName", "Dataset-LongName", "Dataset-Description", "DatasetParameter-*", "DatasetSource-*")
-				   		             .boost(2)
-				   		             .type(MultiMatchQueryBuilder.Type.PHRASE));*/
 
 		QueryBuilder qb = QueryBuilders.queryStringQuery(query); 
 		SearchResponse response = client.prepareSearch(index)
