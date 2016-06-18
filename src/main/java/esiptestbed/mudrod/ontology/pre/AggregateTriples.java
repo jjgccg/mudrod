@@ -17,14 +17,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -94,7 +92,7 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 
 		}
 	    }
-	    }*/
+	    
 		
 		/*try {
 			List<String> files = IOUtils.readLines(MudrodEngine.class.getClassLoader()
