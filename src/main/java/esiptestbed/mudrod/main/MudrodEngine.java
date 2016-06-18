@@ -106,9 +106,24 @@ public class MudrodEngine {
 
   public static void main(String[] args) {
     // TODO Auto-generated method stub
-    MudrodEngine test = new MudrodEngine();
-
-    test.start();
-    test.end();
+	String dataDir = args[0];
+    MudrodEngine me = new MudrodEngine();
+    
+    me.config.put("logDir", dataDir);
+    
+    me.config.put("ontologyInputDir", dataDir + "SWEET_ocean/");
+    me.config.put("oceanTriples", dataDir + "Ocean_triples.csv");
+    
+    me.config.put("userHistoryMatrix", dataDir + "UserHistoryMatrix.csv");
+    me.config.put("clickstreamMatrix", dataDir + "ClickstreamMatrix.csv");
+    me.config.put("metadataMatrix", dataDir + "MetadataMatrix.csv");
+    
+    me.config.put("clickstreamSVDMatrix_tmp", dataDir + "clickstreamSVDMatrix_tmp.csv");
+    me.config.put("metadataSVDMatrix_tmp", dataDir + "metadataSVDMatrix_tmp.csv");
+    
+    me.config.put("raw_metadataPath", dataDir + "RawMetadata");
+    
+    me.start();
+    me.end();
   }
 }

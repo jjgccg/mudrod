@@ -35,7 +35,6 @@ import org.jdom2.input.SAXBuilder;
 import esiptestbed.mudrod.discoveryengine.DiscoveryStepAbstract;
 import esiptestbed.mudrod.driver.ESDriver;
 import esiptestbed.mudrod.driver.SparkDriver;
-import esiptestbed.mudrod.main.MudrodEngine;
 
 public class AggregateTriples extends DiscoveryStepAbstract {
 
@@ -95,7 +94,8 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 
 		}
 	    }
-	    
+	    }*/
+		
 		/*try {
 			List<String> files = IOUtils.readLines(MudrodEngine.class.getClassLoader()
 			        .getResourceAsStream("SWEET_ocean/"));
