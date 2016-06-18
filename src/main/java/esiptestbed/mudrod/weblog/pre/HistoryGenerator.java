@@ -68,24 +68,23 @@ public class HistoryGenerator extends DiscoveryStepAbstract {
       BufferedWriter bw = new BufferedWriter(fw);
 
       ArrayList<String> cleanup_typeList = es.getTypeListWithPrefix(
-          config.get("indexName"), config.get("SessionStats"));
+          config.get("indexName"), config.get("SessionStats_prefix"));
 
       bw.write("Num" + ",");
 
+      //es.refreshIndex();
       // step 1: write first row of csv
       SearchResponse sr = es.client.prepareSearch(config.get("indexName"))
-          .setTypes(String.join(", ", cleanup_typeList))
+        //  .setTypes(String.join(", ", cleanup_typeList))
+    		  .setTypes(cleanup_typeList.toArray(new String[0]))
           .setQuery(QueryBuilders.matchAllQuery()).setSize(0)
-          .addAggregation(AggregationBuilders.terms("IPs").field("IP").size(0)) // important
-                                                                                // to
-                                                                                // set
-                                                                                // size
-                                                                                // 0,
-                                                                                // sum_other_doc_count
+          .addAggregation(AggregationBuilders.terms("IPs").field("IP").size(0)) 
           .execute().actionGet();
+      
       Terms IPs = sr.getAggregations().get("IPs");
       List<String> IPList = new ArrayList<String>();
       for (Terms.Bucket entry : IPs.getBuckets()) {
+    	System.out.println(entry.getDocCount());
         if (entry.getDocCount() > Integer
             .parseInt(config.get("mini_userHistory"))) { // filter out less
                                                          // active users/ips
@@ -105,16 +104,11 @@ public class HistoryGenerator extends DiscoveryStepAbstract {
 
       // step 2: step the rest rows of csv
       SearchResponse sr_2 = es.client.prepareSearch(config.get("indexName"))
-          .setTypes(String.join(", ", cleanup_typeList))
+          .setTypes(cleanup_typeList.toArray(new String[0]))
           .setQuery(QueryBuilders.matchAllQuery()).setSize(0)
           .addAggregation(AggregationBuilders.terms("KeywordAgg")
               .field("keywords").size(0).subAggregation(
-                  AggregationBuilders.terms("IPAgg").field("IP").size(0))) // important
-                                                                           // to
-                                                                           // set
-                                                                           // size
-                                                                           // 0,
-                                                                           // sum_other_doc_count
+                  AggregationBuilders.terms("IPAgg").field("IP").size(0)))
           .execute().actionGet();
       Terms keywords = sr_2.getAggregations().get("KeywordAgg");
       for (Terms.Bucket keyword : keywords.getBuckets()) {

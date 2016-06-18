@@ -35,9 +35,9 @@ import esiptestbed.mudrod.driver.SparkDriver;
 
 public class ImportLogFile extends DiscoveryStepAbstract{
 
-	public ImportLogFile(Map<String, String> config, ESDriver es, SparkDriver spark, String time_suffix) {
+	public ImportLogFile(Map<String, String> config, ESDriver es, SparkDriver spark) {
 		super(config, es, spark);
-		this.time_suffix = time_suffix;
+		//this.time_suffix = time_suffix;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -53,7 +53,7 @@ public class ImportLogFile extends DiscoveryStepAbstract{
 		return null;
 	}
 	
-	String time_suffix = null;
+	//String time_suffix = null;
 
 	String logEntryPattern = "^([\\d.]+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) (\\d+|-) \"((?:[^\"]|\")+)\" \"([^\"]+)\"";
 
@@ -95,20 +95,20 @@ public class ImportLogFile extends DiscoveryStepAbstract{
 		es.createBulkProcesser();
 		
 		//String time_suffix = config.get("httplogpath").substring(Math.max(config.get("httplogpath").length() - 2, 0));
-		this.HTTP_type += time_suffix;
+		/*this.HTTP_type += time_suffix;
 		this.FTP_type += time_suffix;
 		this.Cleanup_type += time_suffix;
-		this.SessionStats += time_suffix;
+		this.SessionStats += time_suffix;*/
 		
 		/*config.put("HTTP_type", this.HTTP_type);
 		config.put("FTP_type", this.FTP_type);
 		config.put("Cleanup_type", this.Cleanup_type);
 		config.put("SessionStats", this.SessionStats);*/
 		
-		String httplogpath = config.get("logDir") + config.get("httpPrefix") + time_suffix + "/" + config.get("httpPrefix") + time_suffix;
-		String ftplogpath = config.get("logDir") + config.get("ftpPrefix") + time_suffix + "/" + config.get("ftpPrefix") + time_suffix;
+		String httplogpath = config.get("logDir") + config.get("httpPrefix") + config.get("TimeSuffix") + "/" + config.get("httpPrefix") + config.get("TimeSuffix");
+		String ftplogpath = config.get("logDir") + config.get("ftpPrefix") + config.get("TimeSuffix") + "/" + config.get("ftpPrefix") + config.get("TimeSuffix");
 		
-		try {
+	/*	try {
 			ReadLogFile(httplogpath, "http", config.get("indexName"), this.HTTP_type);
 			ReadLogFile(ftplogpath, "FTP", config.get("indexName"), this.FTP_type);
 		} catch (ParseException e) {
@@ -120,7 +120,7 @@ public class ImportLogFile extends DiscoveryStepAbstract{
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		es.destroyBulkProcessor();
 		

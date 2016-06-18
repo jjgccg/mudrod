@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -46,7 +47,7 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 	@Override
 	public Object execute() {
 		// TODO Auto-generated method stub
-		File file = null;
+		/*File file = null;
 		try {
 			file = File.createTempFile("oceanTriples", ".csv");
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
@@ -55,9 +56,9 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 		} catch (IOException e3) {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
-		}
+		}*/
 		
-        /*File file = new File(this.config.get("oceanTriples"));
+        File file = new File(this.config.get("oceanTriples"));
 		if (file.exists()) {
 			file.delete();			
 		}
@@ -93,8 +94,9 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 			}
 
 		}
-	    }*/
-		try {
+	    }
+	    
+		/*try {
 			List<String> files = IOUtils.readLines(MudrodEngine.class.getClassLoader()
 			        .getResourceAsStream("SWEET_ocean/"));
 			
@@ -111,7 +113,7 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
 
 		try {
 			bw.close();
@@ -130,21 +132,21 @@ public class AggregateTriples extends DiscoveryStepAbstract {
 
 	BufferedWriter bw = null;
 
-/*	public void loadxml(String filePathName) throws JDOMException, IOException{
+	public void loadxml(String filePathName) throws JDOMException, IOException{
 		SAXBuilder saxBuilder = new SAXBuilder();
 		File file=new File(filePathName);
 
 		document = saxBuilder.build(file);
 		rootNode = document.getRootElement();
 
-	}*/
+	}
 	
-	public void loadxml(InputStream owlStream) throws JDOMException, IOException{
+	/*public void loadxml(InputStream owlStream) throws JDOMException, IOException{
 		SAXBuilder saxBuilder = new SAXBuilder();
 		document = saxBuilder.build(owlStream);
 		rootNode = document.getRootElement();
 
-	}
+	}*/
 
 	public void loopxml(){
 		Iterator<?> processDescendants = rootNode.getDescendants(new ElementFilter()); 

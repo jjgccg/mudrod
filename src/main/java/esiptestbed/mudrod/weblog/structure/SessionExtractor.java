@@ -56,7 +56,7 @@ public class SessionExtractor implements Serializable {
   protected List<ClickStream> getClickStreamList(Map<String, String> config,
       ESDriver es) throws Exception {
     ArrayList<String> cleanup_typeList = es.getTypeListWithPrefix(
-        config.get("indexName"), config.get("Cleanup_type"));
+        config.get("indexName"), config.get("Cleanup_type_prefix"));
     List<ClickStream> result = new ArrayList<ClickStream>();
     for (int n = 0; n < cleanup_typeList.size(); n++) {
       String cleanupType = cleanup_typeList.get(n);

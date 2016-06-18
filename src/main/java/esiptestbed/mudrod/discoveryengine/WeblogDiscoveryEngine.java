@@ -34,16 +34,18 @@ public class WeblogDiscoveryEngine extends DiscoveryEngineAbstract {
 	public WeblogDiscoveryEngine(Map<String, String> config, ESDriver es, SparkDriver spark){
 		super(config, es, spark);
 	}
+	
+	public String time_suffix = null;
 
 	@Override
 	public void preprocess() {
 		// TODO Auto-generated method stub	
 		System.out.println("*****************Web log preprocessing starts******************");
-		
+				
 		File directory = new File(config.get("logDir"));
 
-		ArrayList<String> Input_list = new ArrayList<String>();
 		// get all the files from a directory
+		ArrayList<String> Input_list = new ArrayList<String>();	
 		File[] fList = directory.listFiles();
 		for (File file : fList) {
 			if (file.isFile()) {
@@ -54,10 +56,13 @@ public class WeblogDiscoveryEngine extends DiscoveryEngineAbstract {
 		}
 
 		for(int i =0; i < Input_list.size(); i++){
+			time_suffix = Input_list.get(i);
+			config.put("TimeSuffix", time_suffix);
+			
 			startTime=System.currentTimeMillis();
 			System.out.println("*****************Web log preprocessing starts******************" + Input_list.get(i));
 			
-			DiscoveryStepAbstract im = new ImportLogFile(this.config, this.es, this.spark, Input_list.get(i));
+			DiscoveryStepAbstract im = new ImportLogFile(this.config, this.es, this.spark);
 			im.execute();
 
 			DiscoveryStepAbstract cd = new CrawlerDetection(this.config, this.es, this.spark);
@@ -76,6 +81,8 @@ public class WeblogDiscoveryEngine extends DiscoveryEngineAbstract {
 			
 			System.out.println("*****************Web log preprocessing ends******************Took " + (endTime-startTime)/1000+"s***" + Input_list.get(i));
 		}
+		
+		
 		
 		DiscoveryStepAbstract hg = new HistoryGenerator(this.config, this.es, this.spark);
 		hg.execute();
