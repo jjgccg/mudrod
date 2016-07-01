@@ -44,6 +44,7 @@ import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.hppc.cursors.ObjectObjectCursor;
 import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeUnit;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.Fuzziness;
@@ -81,7 +82,26 @@ public class ESDriver implements Serializable {
 				.client(true)
 				.node();
 
-		client = node.client();	
+		client = node.client();
+	}
+	
+	public ESDriver(Map<String, String> config){
+		Settings settings = System.getProperty("file.separator").equals("/") ? ImmutableSettings.settingsBuilder()
+				.put("http.enabled", "false")
+				.put("transport.tcp.port", config.get("ES_Transport_TCP_Port"))
+				.put("discovery.zen.ping.multicast.enabled", "false")
+				.put("discovery.zen.ping.unicast.hosts", config.get("ES_unicast_hosts"))
+				.build() : ImmutableSettings.settingsBuilder()
+				.put("http.enabled", false)
+				.build();;
+
+		 node =
+				nodeBuilder()
+				.settings(settings)
+				.clusterName(config.get("clusterName"))
+				.client(true)
+				.node();
+		 client = node.client();
 	}
 
 	public void createBulkProcesser(){

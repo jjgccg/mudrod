@@ -39,7 +39,7 @@ public class MudrodEngine {
 
   public MudrodEngine() {
     loadConfig();
-    es = new ESDriver(config.get("clusterName"));
+    es = new ESDriver(config);
     spark = new SparkDriver();
 
   }
