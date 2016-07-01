@@ -84,7 +84,7 @@ public class HistoryGenerator extends DiscoveryStepAbstract {
       Terms IPs = sr.getAggregations().get("IPs");
       List<String> IPList = new ArrayList<String>();
       for (Terms.Bucket entry : IPs.getBuckets()) {
-    	System.out.println(entry.getDocCount());
+    	//System.out.println(entry.getDocCount());
         if (entry.getDocCount() > Integer
             .parseInt(config.get("mini_userHistory"))) { // filter out less
                                                          // active users/ips

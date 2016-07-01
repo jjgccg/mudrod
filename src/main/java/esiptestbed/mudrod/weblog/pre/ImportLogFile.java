@@ -108,7 +108,7 @@ public class ImportLogFile extends DiscoveryStepAbstract{
 		String httplogpath = config.get("logDir") + config.get("httpPrefix") + config.get("TimeSuffix") + "/" + config.get("httpPrefix") + config.get("TimeSuffix");
 		String ftplogpath = config.get("logDir") + config.get("ftpPrefix") + config.get("TimeSuffix") + "/" + config.get("ftpPrefix") + config.get("TimeSuffix");
 		
-	/*	try {
+		try {
 			ReadLogFile(httplogpath, "http", config.get("indexName"), this.HTTP_type);
 			ReadLogFile(ftplogpath, "FTP", config.get("indexName"), this.FTP_type);
 		} catch (ParseException e) {
@@ -120,7 +120,7 @@ public class ImportLogFile extends DiscoveryStepAbstract{
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		
 		es.destroyBulkProcessor();
 		

@@ -183,7 +183,7 @@ public class ESDriver implements Serializable {
 				bulkProcessor.add(deleteRequest);
 			}
 
-			System.out.println("Need to delete " + scrollResp.getHits().getHits().length + " records");
+			//System.out.println("Need to delete " + scrollResp.getHits().getHits().length + " records");
 
 			scrollResp = client.prepareSearchScroll(scrollResp.getScrollId())
 					.setScroll(new TimeValue(600000)).execute().actionGet();

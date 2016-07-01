@@ -76,9 +76,9 @@ public class MudrodEngine {
       e.printStackTrace();
     }
 
-    for (Map.Entry<String, String> entry : config.entrySet()) {
+    /*for (Map.Entry<String, String> entry : config.entrySet()) {
       System.out.println(entry.getKey() + " : " + entry.getValue());
-    }
+    }*/
   }
 
   public void start() {
@@ -104,7 +104,15 @@ public class MudrodEngine {
 
   public static void main(String[] args) {
     // TODO Auto-generated method stub
+	  
+  	if(args.length ==0){
+		System.out.println("please input log directory!");
+  		return;
+	}
 	String dataDir = args[0];
+	if(!dataDir.endsWith("/")){
+		dataDir += "/";
+	}
     MudrodEngine me = new MudrodEngine();
     
     me.config.put("logDir", dataDir);
